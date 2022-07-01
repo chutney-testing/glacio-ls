@@ -14,9 +14,6 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -60,7 +57,7 @@ public class ChutneyTextDocumentService implements TextDocumentService {
         return CompletableFuture.supplyAsync(() -> {
             this.clientLogger.logMessage("Operation '" + "text/completion");
 
-            String character = UserEntries.getCharacter(position);
+            String character = UserEntries.getWord(position);
 
             FileCompletionSuggestion fileCompletionSuggestion = new FileCompletionSuggestion("completion.txt");
             List<Suggestion> suggestions = fileCompletionSuggestion.getSuggestion(character);
