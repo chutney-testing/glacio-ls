@@ -1,5 +1,6 @@
 package com.chutneytesting.infra;
 
+import com.chutneytesting.LSClientLogger;
 import org.eclipse.lsp4j.CompletionParams;
 
 import java.io.IOException;
@@ -7,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class UserEntries {
+
+    private static LSClientLogger clientLogger;
     
     public static String getWord(CompletionParams position) {
         String line = getLine(position);

@@ -1,5 +1,7 @@
-package com.chutneytesting.infra;
+package com.chutneytesting.api;
 
+import com.chutneytesting.api.SuggestionMapper;
+import com.chutneytesting.infra.Suggestion;
 import org.assertj.core.api.Assertions;
 import org.eclipse.lsp4j.CompletionItem;
 import org.junit.jupiter.api.Test;

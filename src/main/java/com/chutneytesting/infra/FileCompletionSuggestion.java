@@ -1,8 +1,5 @@
 package com.chutneytesting.infra;
 
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionItemKind;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

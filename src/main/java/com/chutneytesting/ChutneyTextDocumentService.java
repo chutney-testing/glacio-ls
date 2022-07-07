@@ -2,7 +2,7 @@ package com.chutneytesting;
 
 import com.chutneytesting.infra.FileCompletionSuggestion;
 import com.chutneytesting.infra.Suggestion;
-import com.chutneytesting.infra.SuggestionMapper;
+import com.chutneytesting.api.SuggestionMapper;
 import com.chutneytesting.infra.UserEntries;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
@@ -14,6 +14,7 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,9 +36,7 @@ public class ChutneyTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        this.clientLogger.logMessage("Operation '" + "text/didChange" +
-                "' {fileUri: '" + didChangeTextDocumentParams.getTextDocument().getUri() + "'} Changed");
-        // this.clientLogger.logMessage();
+        this.clientLogger.logMessage("DIDCHANGE COMPLET : " + didChangeTextDocumentParams);
     }
 
     @Override
@@ -56,13 +55,14 @@ public class ChutneyTextDocumentService implements TextDocumentService {
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {
         return CompletableFuture.supplyAsync(() -> {
             this.clientLogger.logMessage("Operation '" + "text/completion");
+            clientLogger.logMessage("POSITION DocumentService uri : " + position.getTextDocument().getUri());
 
             String character = UserEntries.getWord(position);
-
             FileCompletionSuggestion fileCompletionSuggestion = new FileCompletionSuggestion("completion.txt");
             List<Suggestion> suggestions = fileCompletionSuggestion.getSuggestion(character);
 
             List<CompletionItem> completionItems = SuggestionMapper.toCompletionItem(suggestions);
+
 
             /*CompletionItem completionItem = new CompletionItem();
             completionItem.setInsertText("sayHello() {\n    print(\"hello\")\n}");

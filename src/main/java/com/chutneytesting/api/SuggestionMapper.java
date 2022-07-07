@@ -1,5 +1,6 @@
-package com.chutneytesting.infra;
+package com.chutneytesting.api;
 
+import com.chutneytesting.infra.Suggestion;
 import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.ArrayList;

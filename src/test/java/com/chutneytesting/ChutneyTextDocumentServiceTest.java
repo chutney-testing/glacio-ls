@@ -13,17 +13,19 @@ import java.util.concurrent.ExecutionException;
 class ChutneyTextDocumentServiceTest {
 
     @Test
-    public void should_get_text_change() {
+    public void should_get_text_change_parameters() {
 
-        VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier();
-        TextDocumentContentChangeEvent userChange = new TextDocumentContentChangeEvent("T");
+        VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney", 2);
+        TextDocumentContentChangeEvent userChange = new TextDocumentContentChangeEvent("Test");
         List<TextDocumentContentChangeEvent> contentChange = new ArrayList<>();
         contentChange.add(userChange);
         DidChangeTextDocumentParams  didChangeTextDocumentParams = new DidChangeTextDocumentParams(textDocument, contentChange);
 
         String userEntry = didChangeTextDocumentParams.getContentChanges().get(0).getText();
+        String uri = didChangeTextDocumentParams.getTextDocument().getUri();
 
-        Assertions.assertThat(userEntry).isEqualTo("T");
+        Assertions.assertThat(userEntry).isEqualTo("Test");
+        Assertions.assertThat(uri).isEqualTo("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney");
     }
 
     @Test
