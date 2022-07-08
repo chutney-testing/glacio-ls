@@ -20,9 +20,7 @@ class TextChangeMapperTest {
         contentChange.add(userChange);
         DidChangeTextDocumentParams didChangeTextDocumentParams = new DidChangeTextDocumentParams(textDocument, contentChange);
 
-        TextChangeMapper mapper = new TextChangeMapper(didChangeTextDocumentParams);
-
-        Assertions.assertThat(mapper.toMap()).containsEntry("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney", "Test");
+        Assertions.assertThat(TextChangeMapper.toMap(didChangeTextDocumentParams)).containsEntry("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney", "Test");
     }
 
 }

@@ -17,9 +17,8 @@ class SuggestionMapperTest {
         List<Suggestion> suggestions = new ArrayList<>();
         suggestions.add(new Suggestion("TOTO", "TOTOLABEL", "TOTODETAILS"));
         suggestions.add(new Suggestion("TATA", "TATALABEL", "TATADETAILS"));
-        SuggestionMapper converter = new SuggestionMapper();
 
-        List<CompletionItem> convertedList = converter.toCompletionItem(suggestions);
+        List<CompletionItem> convertedList = SuggestionMapper.toCompletionItem(suggestions);
 
         List<CompletionItem> exampleList = new ArrayList<>();
         CompletionItem firstItem = new CompletionItem("TOTOLABEL");

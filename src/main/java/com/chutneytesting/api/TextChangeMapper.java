@@ -6,18 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextChangeMapper {
-
-    String fileUri;
-    String textChange;
-    Map<String, String> map = new HashMap<>();
-
-    public TextChangeMapper(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        this.fileUri = didChangeTextDocumentParams.getTextDocument().getUri();
-        this.textChange = didChangeTextDocumentParams.getContentChanges().get(0).getText();
-    }
-
-    protected Map<String, String> toMap() {
-       map.put(fileUri, textChange);
+    public static Map<String, String> toMap(DidChangeTextDocumentParams didChangeTextDocumentParams) {
+        Map<String, String> map = new HashMap<>();
+       map.put(didChangeTextDocumentParams.getTextDocument().getUri(), didChangeTextDocumentParams.getContentChanges().get(0).getText());
        return map;
     }
 }

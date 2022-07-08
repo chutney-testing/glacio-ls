@@ -1,5 +1,6 @@
 package com.chutneytesting;
 
+import com.chutneytesting.api.TextChangeMapper;
 import com.chutneytesting.infra.FileCompletionSuggestion;
 import com.chutneytesting.infra.Suggestion;
 import com.chutneytesting.api.SuggestionMapper;
@@ -14,8 +15,11 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ChutneyTextDocumentService implements TextDocumentService {
@@ -36,7 +40,8 @@ public class ChutneyTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        this.clientLogger.logMessage("DIDCHANGE COMPLET : " + didChangeTextDocumentParams);
+        Map<String, String> map = TextChangeMapper.toMap(didChangeTextDocumentParams);
+        map.forEach((key, value) -> this.clientLogger.logMessage("TEST MAP -> " + key + " : " + value));
     }
 
     @Override
