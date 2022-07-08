@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class TextChangeMapperTest {
+class ProjectDocumentTest {
 
     @Test
     public void should_put_text_change_in_a_map() {
@@ -20,7 +20,8 @@ class TextChangeMapperTest {
         contentChange.add(userChange);
         DidChangeTextDocumentParams didChangeTextDocumentParams = new DidChangeTextDocumentParams(textDocument, contentChange);
 
-        Assertions.assertThat(TextChangeMapper.toMap(didChangeTextDocumentParams)).containsEntry("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney", "Test");
+        ProjectDocument projectDocument = new ProjectDocument(didChangeTextDocumentParams);
+        Assertions.assertThat(projectDocument.toMap()).containsEntry("/Users/adriengogois/Desktop/lsp-chutney/chutney_plugin/index.chutney", "Test");
     }
 
 }
