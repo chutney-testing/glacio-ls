@@ -1,10 +1,12 @@
 package com.chutneytesting;
 
-import com.chutneytesting.api.ProjectDocument;
+import com.chutneytesting.api.ProjectDocuments;
+import com.chutneytesting.api.SuggestionMapper;
 import com.chutneytesting.infra.FileCompletionSuggestion;
 import com.chutneytesting.infra.Suggestion;
-import com.chutneytesting.api.SuggestionMapper;
-import com.chutneytesting.infra.UserEntries;
+import com.chutneytesting.infra.WordFinder;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
@@ -15,18 +17,16 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 public class ChutneyTextDocumentService implements TextDocumentService {
 
-    private ChutneyLanguageServer languageServer;
-    private LSClientLogger clientLogger;
+    private final ChutneyLanguageServer languageServer;
+    private final LSClientLogger clientLogger;
+    private final ProjectDocuments documents;
 
-    public ChutneyTextDocumentService(ChutneyLanguageServer languageServer) {
+    public ChutneyTextDocumentService(ChutneyLanguageServer languageServer, ProjectDocuments documents) {
         this.languageServer = languageServer;
         this.clientLogger = LSClientLogger.getInstance();
+        this.documents = documents;
     }
 
     @Override
@@ -37,9 +37,10 @@ public class ChutneyTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        ProjectDocument projectDocument = new ProjectDocument(didChangeTextDocumentParams);
-        Map<String, String> map = projectDocument.toMap();
-        map.forEach((key, value) -> this.clientLogger.logMessage("TEST MAP -> " + key + " : " + value));
+        this.documents.add(
+                didChangeTextDocumentParams.getTextDocument().getUri(),
+                didChangeTextDocumentParams.getContentChanges().get(0).getText()
+        );
     }
 
     @Override
@@ -55,29 +56,20 @@ public class ChutneyTextDocumentService implements TextDocumentService {
     }
 
     @Override
-    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {
+    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams params) {
         return CompletableFuture.supplyAsync(() -> {
             this.clientLogger.logMessage("Operation '" + "text/completion");
-            clientLogger.logMessage("POSITION DocumentService uri : " + position.getTextDocument().getUri());
+            clientLogger.logMessage("POSITION DocumentService uri : " + params.getTextDocument().getUri());
 
-            String character = UserEntries.getWord(position);
+            String documentContent = this.documents.get(params.getTextDocument().getUri());
+            String character = WordFinder.getWord(params.getPosition().getLine(), params.getPosition().getCharacter(), documentContent);
             FileCompletionSuggestion fileCompletionSuggestion = new FileCompletionSuggestion("completion.txt");
             List<Suggestion> suggestions = fileCompletionSuggestion.getSuggestion(character);
 
             List<CompletionItem> completionItems = SuggestionMapper.toCompletionItem(suggestions);
 
-
-            /*CompletionItem completionItem = new CompletionItem();
-            completionItem.setInsertText("sayHello() {\n    print(\"hello\")\n}");
-            completionItem.setLabel("sayHello()");
-            completionItem.setKind(CompletionItemKind.Snippet);
-            completionItem.setDetail("sayHello()\n this will say hello to the people");*/
-
             return Either.forLeft(completionItems);
         });
     }
-
-
-
 
 }

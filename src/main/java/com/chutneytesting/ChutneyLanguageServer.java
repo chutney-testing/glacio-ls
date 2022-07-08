@@ -1,5 +1,6 @@
 package com.chutneytesting;
 
+import com.chutneytesting.api.ProjectDocuments;
 import org.eclipse.lsp4j.ClientCapabilities;
 import org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.CompletionRegistrationOptions;
@@ -21,9 +22,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Language Server implementation for Ballerina.
- */
 public class ChutneyLanguageServer implements LanguageServer, LanguageClientAware {
 
     private TextDocumentService textDocumentService;
@@ -33,7 +31,8 @@ public class ChutneyLanguageServer implements LanguageServer, LanguageClientAwar
     private int shutdown = 1;
 
     public ChutneyLanguageServer() {
-        this.textDocumentService = new ChutneyTextDocumentService(this);
+        ProjectDocuments documents = new ProjectDocuments();
+        this.textDocumentService = new ChutneyTextDocumentService(this, documents);
         this.workspaceService = new ChutneyWorkSpaceService(this);
     }
 

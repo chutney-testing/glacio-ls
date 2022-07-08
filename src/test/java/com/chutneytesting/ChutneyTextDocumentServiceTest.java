@@ -1,5 +1,6 @@
 package com.chutneytesting;
 
+import com.chutneytesting.api.ProjectDocuments;
 import org.assertj.core.api.Assertions;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -31,7 +32,8 @@ class ChutneyTextDocumentServiceTest {
     @Test
     public void completion() throws ExecutionException, InterruptedException {
         final ChutneyLanguageServer languageServer = new ChutneyLanguageServer();
-        ChutneyTextDocumentService textDocumentService = new ChutneyTextDocumentService(languageServer);
+        ProjectDocuments documents = new ProjectDocuments();
+        ChutneyTextDocumentService textDocumentService = new ChutneyTextDocumentService(languageServer, documents);
 
         TextDocumentIdentifier textDocument = new TextDocumentIdentifier("/Users/adriengogois/Desktop/lsp-chutney/chutney-language-server/src/test/resources/sample.txt");
         Position textPosition = new Position(0, 1);
